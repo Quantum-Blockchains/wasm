@@ -31,7 +31,7 @@ pub fn ext_secp_from_seed(seed: &[u8]) -> Vec<u8> {
 			let mut res = vec![];
 			let pubkey = PublicKey::from_secret_key(SECP256K1, &s);
 
-			res.extend_from_slice(&s.serialize_secret());
+			res.extend_from_slice(&s.secret_bytes());
 			res.extend_from_slice(&pubkey.serialize());
 
 			res

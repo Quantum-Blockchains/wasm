@@ -9,6 +9,7 @@ const hashing = require('./hashing.js');
 const secp256k1 = require('./secp256k1.js');
 const sr25519 = require('./sr25519.js');
 const vrf = require('./vrf.js');
+const dilithium2 = require('./dilithium2.js');
 
 const tests = {
   // We place secp256k1 first, this allows the interaction with it in the
@@ -19,7 +20,8 @@ const tests = {
   ...sr25519,
   ...vrf,
   ...bip39,
-  ...hashing
+  ...hashing,
+  ...dilithium2
 };
 
 async function beforeAll (name, wasm) {
