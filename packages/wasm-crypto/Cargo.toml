@@ -34,7 +34,10 @@ tiny-keccak = { version = "2.0.1", features = ["keccak"] }
 twox-hash = "1.5.0"
 wasm-bindgen = "=0.2.79"
 wee_alloc = "0.4.3"
-sp-core = { version = "6.0.0", git = "https://github.com/Quantum-Blockchains/substrate.git", branch = "kostia/JEQB-163/Add-the-Dilithium2-algorithm" }
+#sp-core = { version = "6.0.0", git = "https://github.com/Quantum-Blockchains/substrate.git", branch = "kostia/JEQB-163/Add-the-Dilithium2-algorithm" }
+#dilithium = { version = "0.1.0", git = "https://github.com/Quantum-Blockchains/dilithium.git", branch = "kostia/JEQB-235/Start-Dilithium-integration"}
+#crystals-dilithium = {version = "1.0.0", default-features = false, optional = true}
+crystals-dilithium = { version = "1.0.0", git = "https://github.com/Quantum-Blockchains/dilithium.git", branch = "kostia/Dilithium-integration-to-wasm-crypto" }
 
 [dev-dependencies]
 hex-literal = "0.2.0"
