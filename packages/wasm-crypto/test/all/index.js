@@ -1,8 +1,6 @@
 // Copyright 2019-2023 @polkadot/wasm-crypto authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-/* global describe */
-
 import { assert } from '@polkadot/util';
 
 import * as bip39 from './bip39.js';
@@ -11,6 +9,7 @@ import * as hashing from './hashing.js';
 import * as secp256k1 from './secp256k1.js';
 import * as sr25519 from './sr25519.js';
 import * as vrf from './vrf.js';
+// import * as dilithium2 from './dilithium2.js';
 
 export const tests = {
   // We place secp256k1 first, this allows the interaction with it in the
@@ -23,12 +22,9 @@ export const tests = {
   hashing,
   sr25519,
   vrf
+  // dilithium2
 };
 
-/**
- * @param {string} name
- * @param {*} wasm
- */
 export async function initRun (name, wasm) {
   const result = await wasm.waitReady();
 
@@ -39,12 +35,7 @@ export async function initRun (name, wasm) {
   return result;
 }
 
-/**
- * @param {string} name
- * @param {*} wasm
- */
 export function runAll (name, wasm) {
-  /** @type {string[]} */
   const failed = [];
   let count = 0;
 
@@ -62,6 +53,7 @@ export function runAll (name, wasm) {
             try {
               console.time(timerId);
               console.log();
+              // console.log(timerId);
 
               test(wasm);
 
@@ -81,29 +73,19 @@ export function runAll (name, wasm) {
   }
 }
 
-/**
- * @param {string} type
- * @param {*} wasm
- */
 export function runUnassisted (type, wasm) {
   console.log(`\n*** ${type}: Running tests`);
 
-  // For these we are pass-through describe and it handlers
-  // @ts-expect-error We are hacking this, so expect TS to be unhappy...
+  // for these we are pass-through describe and it handlers
   globalThis.describe = (name, fn) => {
     console.log('\n', name);
 
-    // We expect this to be handled top-level, in the test itself
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     fn();
   };
 
-  // @ts-expect-error We are hacking this, so expect TS to be unhappy...
   globalThis.it = (name, fn) => {
     console.log(`\t${name}`);
 
-    // We expect this to be handled top-level, in the test itself
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     fn();
   };
 

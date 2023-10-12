@@ -34,6 +34,7 @@ tiny-keccak = { version = "2.0.1", features = ["keccak"] }
 twox-hash = "1.5.0"
 wasm-bindgen = "=0.2.79"
 wee_alloc = "0.4.3"
+crystals-dilithium = { version = "1.0.0", git = "https://github.com/Quantum-Blockchains/dilithium.git", branch = "kostia/Dilithium-integration-to-wasm-crypto" }
 
 [dev-dependencies]
 hex-literal = "0.2.0"
