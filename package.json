@@ -1,9 +1,6 @@
 {
   "author": "Jaco Greeff <jacogr@gmail.com>",
   "bugs": "https://github.com/polkadot-js/wasm/issues",
-  "engines": {
-    "node": ">=18.14"
-  },
   "homepage": "https://github.com/polkadot-js/wasm#readme",
   "license": "Apache-2.0",
   "packageManager": "yarn@3.2.0",
@@ -14,10 +11,10 @@
   },
   "sideEffects": false,
   "type": "module",
-  "version": "7.2.3-7-x",
+  "version": "6.4.1",
   "versions": {
-    "git": "7.2.3-7-x",
-    "npm": "7.2.2"
+    "git": "6.4.1",
+    "npm": "6.4.1"
   },
   "workspaces": [
     "packages/*"
@@ -25,6 +22,7 @@
   "scripts": {
     "build": "yarn build:wasm",
     "build:js": "./scripts/build-js.sh",
+    "build:mac": "PATH=\"/opt/homebrew/opt/llvm/bin:$PATH\" CC=/opt/homebrew/opt/llvm/bin/clang AR=/opt/homebrew/opt/llvm/bin/llvm-ar yarn build",
     "build:release": "polkadot-ci-ghact-build",
     "build:rollup": "polkadot-exec-rollup --config",
     "build:wasm": "./scripts/build.sh",
@@ -35,20 +33,22 @@
     "lint": "polkadot-dev-run-lint",
     "postinstall": "polkadot-dev-yarn-only",
     "test": "yarn test:wasm-crypto:rust",
-    "test:js": "yarn test:wasm-crypto:js",
     "test:wasm-crypto:deno": "deno test --allow-read --import-map=import_map.json packages/wasm-crypto/test/deno.ts",
     "test:wasm-crypto:js": "yarn test:wasm-crypto:js:jest && yarn test:wasm-crypto:js:node",
-    "test:wasm-crypto:js:jest": "polkadot-dev-run-test --env node --loader ./packages/wasm-crypto/test/loader-build.js",
-    "test:wasm-crypto:js:node": "node --no-warnings --loader ./packages/wasm-crypto/test/loader-build.js ./packages/wasm-crypto/test/wasm.js && node --no-warnings --loader ./packages/wasm-crypto/test/loader-build.js ./packages/wasm-crypto/test/asm.js",
+    "test:wasm-crypto:js:jest": "polkadot-dev-run-test ./test/jest.spec.js",
+    "test:wasm-crypto:js:node": "cd packages/wasm-crypto && node ./test/wasm.cjs && node ./test/asm.cjs",
     "test:wasm-crypto:rust": "cd packages/wasm-crypto && RUST_BACKTRACE=full cargo test --release -- --test-threads=1 --nocapture"
   },
   "devDependencies": {
-    "@polkadot/dev": "^0.76.29",
-    "@polkadot/util": "^12.5.1",
-    "@types/node": "^20.8.4",
-    "fflate": "^0.8.1"
+    "@babel/core": "^7.20.5",
+    "@polkadot/dev": "^0.67.167",
+    "@polkadot/util": "^10.1.14",
+    "@polkadot/x-randomvalues": "^10.1.14",
+    "@types/jest": "^29.2.3",
+    "fflate": "^0.7.4",
+    "override-require": "^1.1.1"
   },
   "resolutions": {
-    "typescript": "^5.1.6"
+    "typescript": "^4.9.3"
   }
 }

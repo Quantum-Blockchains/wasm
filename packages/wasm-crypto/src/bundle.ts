@@ -1,11 +1,11 @@
-// Copyright 2019-2023 @polkadot/wasm-crypto authors & contributors
+// Copyright 2019-2022 @polkadot/wasm-crypto authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
 import type { WasmCryptoInstance } from '@polkadot/wasm-crypto-init/types';
 
-import { bridge, initBridge } from './init.js';
+import { bridge, initBridge } from './init';
 
-export { packageInfo } from './packageInfo.js';
+export { packageInfo } from './packageInfo';
 export { bridge };
 
 // Removes the first parameter (expected as WasmCryptoInstance) and leaves the
@@ -84,6 +84,24 @@ export const ed25519Sign = /*#__PURE__*/ withWasm((wasm, pubkey: Uint8Array, sec
 
 export const ed25519Verify = /*#__PURE__*/ withWasm((wasm, signature: Uint8Array, message: Uint8Array, pubkey: Uint8Array): boolean => {
   const ret = wasm.ext_ed_verify(...bridge.allocU8a(signature), ...bridge.allocU8a(message), ...bridge.allocU8a(pubkey));
+
+  return ret !== 0;
+});
+
+export const dilithium2KeypairFromSeed = /*#__PURE__*/ withWasm((wasm, seed: Uint8Array): Uint8Array => {
+  wasm.ext_dilithium_from_seed(8, ...bridge.allocU8a(seed));
+
+  return bridge.resultU8a();
+});
+
+export const dilithium2Sign = /*#__PURE__*/ withWasm((wasm, pubkey: Uint8Array, seed: Uint8Array, message: Uint8Array): Uint8Array => {
+  wasm.ext_dilithium_sign(8, ...bridge.allocU8a(pubkey), ...bridge.allocU8a(seed), ...bridge.allocU8a(message));
+
+  return bridge.resultU8a();
+});
+
+export const dilithium2Verify = /*#__PURE__*/ withWasm((wasm, signature: Uint8Array, message: Uint8Array, pubkey: Uint8Array): boolean => {
+  const ret = wasm.ext_dilithium_verify(...bridge.allocU8a(signature), ...bridge.allocU8a(message), ...bridge.allocU8a(pubkey));
 
   return ret !== 0;
 });

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Copyright 2019-2023 @polkadot/wasm authors & contributors
+# Copyright 2019-2022 @polkadot/wasm authors & contributors
 # This software may be modified and distributed under the terms
 # of the Apache-2.0 license. See the LICENSE file for details.
 
@@ -32,7 +32,7 @@ echo "*** Optimising WASM output"
 
 # convert wasm to base64 structure
 echo "*** Packing WASM into baseX"
-node ../scripts/pack-wasm-base.mjs
+node ../scripts/pack-wasm-base.cjs
 
 # build asmjs version from the input (optimised) WASM
 echo "*** Building asm.js version"
@@ -45,7 +45,7 @@ cp $ASM $DENO_ASM
 # cleanup the generated asm, converting to cjs
 sed -i -e '/import {/d' $ASM
 sed -i -e '1,/var retasmFunc = /!d' $ASM
-sed -i -e 's/var retasmFunc = .*/exports.asmJsInit = (wbg) => asmFunc(wbg);/g' $ASM
+sed -i -e 's/var retasmFunc = .*/const asmJsInit = (wbg) => asmFunc(wbg);\n\nmodule.exports = { asmJsInit };/g' $ASM
 
 # same as the cjs version, this time for deno
 sed -i -e '/import {/d' $DENO_ASM

@@ -1,4 +1,4 @@
-// Copyright 2019-2023 @polkadot/wasm-bridge authors & contributors
+// Copyright 2019-2022 @polkadot/wasm-bridge authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
 // A number of functions are "unsafe" and purposefully so - it is
@@ -7,32 +7,31 @@
 // then ensures that the internal wasm instance here is available
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 
-import type { BridgeBase, InitFn, InitPromise, WasmBaseInstance, WasmImports } from './types.js';
+import type { BridgeBase, InitFn, InitPromise, WasmBaseInstance, WasmImports } from './types';
 
 import { stringToU8a, u8aToString } from '@polkadot/util';
 
-import { Wbg } from './wbg.js';
+import { Wbg } from './wbg';
 
 /**
  * @name Bridge
  * @description
  * Creates a bridge between the JS and WASM environments.
  *
- * For any bridge it is passed an function which is then called internally at the
+ * For any bridge it is passed an function white is then called internally at the
  * time of initialization. This affectively implements the layer between WASM and
  * the native environment, providing all the plumbing needed for the Wbg classes.
  */
 export class Bridge<C extends WasmBaseInstance> implements BridgeBase<C> {
-  readonly #createWasm: InitFn<C>;
-  readonly #heap: unknown[];
-  readonly #wbg: WasmImports;
-
   #cachegetInt32: Int32Array | null;
   #cachegetUint8: Uint8Array | null;
+  #createWasm: InitFn<C>;
+  #heap: unknown[];
   #heapNext: number;
   #wasm: C | null;
   #wasmError: string | null;
   #wasmPromise: InitPromise<C> | null;
+  #wbg: WasmImports;
   #type: 'asm' | 'wasm' | 'none';
 
   constructor (createWasm: InitFn<C>) {

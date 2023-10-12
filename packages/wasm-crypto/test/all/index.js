@@ -1,35 +1,30 @@
-// Copyright 2019-2023 @polkadot/wasm-crypto authors & contributors
+// Copyright 2019-2022 @polkadot/wasm-crypto authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-/* global describe */
+const { assert } = require('@polkadot/util');
 
-import { assert } from '@polkadot/util';
+const bip39 = require('./bip39.js');
+const ed25519 = require('./ed25519.js');
+const hashing = require('./hashing.js');
+const secp256k1 = require('./secp256k1.js');
+const sr25519 = require('./sr25519.js');
+const vrf = require('./vrf.js');
+// const dilithium2 = require('./dilithium2.js');
 
-import * as bip39 from './bip39.js';
-import * as ed25519 from './ed25519.js';
-import * as hashing from './hashing.js';
-import * as secp256k1 from './secp256k1.js';
-import * as sr25519 from './sr25519.js';
-import * as vrf from './vrf.js';
-
-export const tests = {
+const tests = {
   // We place secp256k1 first, this allows the interaction with it in the
   // hashing (specifically scrypt) test not be an issue (ASM.js only)
   // https://github.com/polkadot-js/wasm/issues/307
-  secp256k1,
-  // eslint-disable-next-line sort-keys
-  bip39,
-  ed25519,
-  hashing,
-  sr25519,
-  vrf
+  ...secp256k1,
+  ...ed25519,
+  ...sr25519,
+  ...vrf,
+  ...bip39,
+  ...hashing,
+  // ...dilithium2
 };
 
-/**
- * @param {string} name
- * @param {*} wasm
- */
-export async function initRun (name, wasm) {
+async function beforeAll (name, wasm) {
   const result = await wasm.waitReady();
 
   console.log(`*** waitReady()=${result} for ${wasm.bridge.type}`);
@@ -39,41 +34,31 @@ export async function initRun (name, wasm) {
   return result;
 }
 
-/**
- * @param {string} name
- * @param {*} wasm
- */
-export function runAll (name, wasm) {
-  /** @type {string[]} */
+function runAll (name, wasm) {
   const failed = [];
   let count = 0;
 
   Object
     .entries(tests)
-    .forEach(([describeName, tests]) => {
-      describe(describeName, () => {
-        Object
-          .entries(tests)
-          .forEach(([name, test]) => {
-            const timerId = `\t${name}`;
+    .forEach(([name, test]) => {
+      const timerId = `\t${name}`;
 
-            count++;
+      count++;
 
-            try {
-              console.time(timerId);
-              console.log();
+      try {
+        console.time(timerId);
+        console.log();
+        console.log(timerId);
 
-              test(wasm);
+        test(wasm);
 
-              console.timeEnd(timerId);
-            } catch (error) {
-              console.error();
-              console.error(error);
+        console.timeEnd(timerId);
+      } catch (error) {
+        console.error();
+        console.error(error);
 
-              failed.push(name);
-            }
-          });
-      });
+        failed.push(name);
+      }
     });
 
   if (failed.length) {
@@ -81,46 +66,24 @@ export function runAll (name, wasm) {
   }
 }
 
-/**
- * @param {string} type
- * @param {*} wasm
- */
-export function runUnassisted (type, wasm) {
-  console.log(`\n*** ${type}: Running tests`);
+function runUnassisted (name, wasm) {
+  console.log(`\n*** ${name}: Running tests`);
 
-  // For these we are pass-through describe and it handlers
-  // @ts-expect-error We are hacking this, so expect TS to be unhappy...
-  globalThis.describe = (name, fn) => {
-    console.log('\n', name);
-
-    // We expect this to be handled top-level, in the test itself
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    fn();
-  };
-
-  // @ts-expect-error We are hacking this, so expect TS to be unhappy...
-  globalThis.it = (name, fn) => {
-    console.log(`\t${name}`);
-
-    // We expect this to be handled top-level, in the test itself
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    fn();
-  };
-
-  console.time(type);
-
-  initRun(type, wasm)
+  beforeAll(name, wasm)
+    .then(() => runAll(name, wasm))
     .then(() => {
-      runAll(type, wasm);
-      console.log(`\n*** ${type}: All passed`);
-      console.timeEnd(type);
-      console.log();
+      console.log(`\n*** ${name}: All passed`);
       process.exit(0);
     })
     .catch((error) => {
-      console.error(`\n*** ${type}: FAILED:`, error.message, '\n');
-      console.timeEnd(type);
-      console.log();
+      console.error(error.message, '\n');
       process.exit(-1);
     });
 }
+
+module.exports = {
+  beforeAll,
+  runAll,
+  runUnassisted,
+  tests
+};

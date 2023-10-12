@@ -1,6 +1,6 @@
-// Copyright 2019-2023 @polkadot/wasm-crypto-wasm authors & contributors
+// Copyright 2019-2022 @polkadot/wasm-crypto-wasm authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import './detectPackage.js';
+import './detectPackage';
 
-export * from './bundle.js';
+export * from './bundle';

@@ -1,4 +1,4 @@
-// Copyright 2019-2023 @polkadot/wasm-util authors & contributors
+// Copyright 2019-2022 @polkadot/wasm-util authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
 // MIT License
@@ -12,22 +12,21 @@
 //   - https://github.com/polkadot-js/api/issues/2963
 //   - https://github.com/101arrowz/fflate/issues/17
 //
-// Only tweaks made here are some TS adjustments (we use strict null checks),
-// the code is otherwise as-is with only the single required function provided
-// (compression is still being done in the build with fflate)
+// Only tweaks make here are some TS adjustments (we use strict null checks), the code is otherwise as-is with
+// only the single required function provided (compression is still being done in the build with fflate)
 
 /* eslint-disable */
 
 // inflate state
 type InflateState = {
   // lmap
-  l?: Uint16Array | undefined;
+  l?: Uint16Array;
   // dmap
-  d?: Uint16Array | undefined;
+  d?: Uint16Array;
   // lbits
-  m?: number | undefined;
+  m?: number;
   // dbits
-  n?: number | undefined;
+  n?: number;
   // final
   f?: number;
   // pos
@@ -171,7 +170,7 @@ const slc = <T extends Uint8Array | Uint16Array | Uint32Array>(v: T, s: number, 
 // find max of array
 const max = (a: Uint8Array | number[]) => {
   let m = a[0];
-  for (let i = 1, count = a.length; i < count; ++i) {
+  for (let i = 1; i < a.length; ++i) {
     if (a[i] > m) m = a[i];
   }
   return m;
