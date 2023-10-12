@@ -1,4 +1,4 @@
-// Copyright 2019-2022 @polkadot/wasm-bridge authors & contributors
+// Copyright 2019-2023 @polkadot/wasm-bridge authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
 // Use non-strong types instead of WasmImports which may not
@@ -7,7 +7,7 @@ export type WasmImports = Record<string, (...args: never[]) => unknown>;
 
 // Use non-strong types instead of WebAssembly.Memory which may not
 // be available as part of the TS environment types (it needs dom)
-export type WasmMemory = { buffer: ArrayBuffer };
+export interface WasmMemory { buffer: ArrayBuffer }
 
 export declare interface InitResult<C extends WasmBaseInstance> {
   error: string | null;
@@ -35,13 +35,13 @@ export interface BridgeBase<C extends WasmBaseInstance> extends InitResult<C> {
   resultString (): string;
 }
 
-export interface WasmBaseInstance {
-  memory: WasmMemory;
-
-  // wbindgen functions (required and used internally)
-
+export interface WasmBindGen {
   __wbindgen_exn_store (a: number): void;
   __wbindgen_free (a: number, b: number): void;
   __wbindgen_malloc (a: number): number;
   __wbindgen_realloc (a: number, b: number, c: number): number;
+}
+
+export interface WasmBaseInstance extends WasmBindGen {
+  memory: WasmMemory;
 }

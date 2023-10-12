@@ -1,23 +1,37 @@
-// Copyright 2019-2022 @polkadot/wasm-crypto authors & contributors
+// Copyright 2019-2023 @polkadot/wasm-crypto authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { createRequire } from 'https://deno.land/std@0.107.0/node/module.ts';
+// This is a Deno file, so we can allow .ts imports
+/* eslint-disable import/extensions */
 
+// NOTE We don't use ts-expect-error here since the build folder may or may
+// not exist (so the error may or may not be there)
+//
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore This should only run against the compiled ouput, where this should exist
 import * as wasm from '../build-deno/mod.ts';
+import { initRun, tests } from './all/index.js';
 
-declare const globalThis: Record<string, unknown>;
+type Tests = Record<string, (wasm: unknown) => void>;
+
+declare const globalThis: {
+  it: (name: string, fn: () => void) => unknown;
+};
 declare const Deno: {
   test: (name: string, test: () => unknown) => unknown;
-}
+};
 
-// ensure we set require on globalThis, it is used is all/*.js
-const require = globalThis.require = createRequire(import.meta.url);
-const { beforeAll, tests } = require('./all/index.js');
+await initRun('wasm', wasm);
 
-await beforeAll('wasm', wasm);
+// We use it to denote the tests
+globalThis.it = (name: string, fn: () => void) => Deno.test(name, () => fn());
 
 Object
-  .entries<(wasm: unknown) => void>(tests)
-  .forEach(([name, test]) => {
-    Deno.test(name, () => test(wasm));
+  .entries<Tests>(tests)
+  .forEach(([describeName, tests]) => {
+    console.log('***', describeName);
+
+    Object
+      .values(tests)
+      .forEach((test) => test(wasm));
   });

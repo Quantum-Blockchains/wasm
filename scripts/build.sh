@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Copyright 2019-2022 @polkadot/wasm authors & contributors
+# Copyright 2019-2023 @polkadot/wasm authors & contributors
 # This software may be modified and distributed under the terms
 # of the Apache-2.0 license. See the LICENSE file for details.
 
@@ -11,7 +11,19 @@ echo "*** Building JavaScript"
 echo "*** Building WASM"
 cd packages
 
-PKG_NAME=wasm-crypto ../scripts/build-wasm.sh
+unamestr=`uname`
+
+# For Mac we set extra paths for clang
+if [[ "$unamestr" == "Darwin" ]]; then
+  if [ ! -f "/opt/homebrew/opt/llvm/bin/clang" ]; then
+    echo "FATAL: Ensure you have clang installed via homebrew"
+    exit 1
+  fi
+
+  PATH="/opt/homebrew/opt/llvm/bin:$PATH" CC=/opt/homebrew/opt/llvm/bin/clang AR=/opt/homebrew/opt/llvm/bin/llvm-ar PKG_NAME=wasm-crypto ../scripts/build-wasm.sh
+else
+  PKG_NAME=wasm-crypto ../scripts/build-wasm.sh
+fi
 
 if [ -z "$WITH_DENO" ]; then
   yarn test:wasm-crypto:js

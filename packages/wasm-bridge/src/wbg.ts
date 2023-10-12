@@ -1,7 +1,7 @@
-// Copyright 2019-2022 @polkadot/wasm-bridge authors & contributors
+// Copyright 2019-2023 @polkadot/wasm-bridge authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { BridgeBase, WasmBaseInstance } from './types';
+import type { BridgeBase, WasmBaseInstance } from './types.js';
 
 import { getRandomValues } from '@polkadot/x-randomvalues';
 
@@ -20,7 +20,7 @@ const DEFAULT_SELF = { crypto: DEFAULT_CRYPTO };
  * Internally the implementation does a thin layer into the supplied bridge.
  */
 export class Wbg<C extends WasmBaseInstance> {
-  #bridge: BridgeBase<C>;
+  readonly #bridge: BridgeBase<C>;
 
   constructor (bridge: BridgeBase<C>) {
     this.#bridge = bridge;
@@ -52,25 +52,21 @@ export class Wbg<C extends WasmBaseInstance> {
   };
 
   /** @internal */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   __wbg_crypto_968f1772287e2df0 = (_idx: number): number => {
     return this.#bridge.addObject(DEFAULT_CRYPTO);
   };
 
   /** @internal */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   __wbg_getRandomValues_a3d34b4fee3c2869 = (_idx: number): number => {
     return this.#bridge.addObject(DEFAULT_CRYPTO.getRandomValues);
   };
 
   /** @internal */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   __wbg_getRandomValues_f5e14ab7ac8e995d = (_arg0: number, ptr: number, len: number): void => {
     DEFAULT_CRYPTO.getRandomValues(this.#bridge.getU8a(ptr, len));
   };
 
   /** @internal */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   __wbg_randomFillSync_d5bd2d655fdf256a = (_idx: number, _ptr: number, _len: number): never => {
     throw new Error('randomFillsync is not available');
 

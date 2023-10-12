@@ -1,9 +1,9 @@
-// Copyright 2019-2022 @polkadot/wasm-crypto authors & contributors
+// Copyright 2019-2023 @polkadot/wasm-crypto authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
 import { createWasm } from '@polkadot/wasm-crypto-init/none';
 
-import { initBridge } from './init';
+import { initBridge } from './init.js';
 
 /**
  * @name initWasm

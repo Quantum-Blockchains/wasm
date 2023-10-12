@@ -1,11 +1,11 @@
-// Copyright 2019-2022 @polkadot/wasm-crypto authors & contributors
+// Copyright 2019-2023 @polkadot/wasm-crypto authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
 import type { WasmCryptoInstance } from '@polkadot/wasm-crypto-init/types';
 
-import { bridge, initBridge } from './init';
+import { bridge, initBridge } from './init.js';
 
-export { packageInfo } from './packageInfo';
+export { packageInfo } from './packageInfo.js';
 export { bridge };
 
 // Removes the first parameter (expected as WasmCryptoInstance) and leaves the

@@ -1,14 +1,12 @@
 {
   "author": "Jaco Greeff <jacogr@gmail.com>",
   "bugs": "https://github.com/polkadot-js/wasm/issues",
-  "contributors": [],
   "description": "A wasm interface layer for use by @polkadot/util-crypto",
   "engines": {
-    "node": ">=14.0.0"
+    "node": ">=16"
   },
   "homepage": "https://github.com/polkadot-js/wasm/tree/master/packages/wasm-crypto#readme",
   "license": "Apache-2.0",
-  "maintainers": [],
   "name": "@polkadot/wasm-crypto",
   "repository": {
     "directory": "packages/wasm-crypto",
@@ -28,19 +26,19 @@
     "./initWasmAsm.cjs"
   ],
   "type": "module",
-  "version": "6.4.2-5-x",
+  "version": "7.2.3-7-x",
   "main": "index.js",
   "dependencies": {
-    "@babel/runtime": "^7.20.6",
-    "@polkadot/wasm-bridge": "6.4.2-5-x",
-    "@polkadot/wasm-crypto-asmjs": "6.4.2-5-x",
-    "@polkadot/wasm-crypto-init": "6.4.2-5-x",
-    "@polkadot/wasm-crypto-wasm": "6.4.2-5-x",
-    "@polkadot/wasm-util": "6.4.2-5-x"
+    "@polkadot/wasm-bridge": "7.2.3-7-x",
+    "@polkadot/wasm-crypto-asmjs": "7.2.3-7-x",
+    "@polkadot/wasm-crypto-init": "7.2.3-7-x",
+    "@polkadot/wasm-crypto-wasm": "7.2.3-7-x",
+    "@polkadot/wasm-util": "7.2.3-7-x",
+    "tslib": "^2.6.2"
   },
   "devDependencies": {
-    "@polkadot/util": "^10.2.1",
-    "@polkadot/x-randomvalues": "^10.2.1"
+    "@polkadot/util": "^12.5.1",
+    "@polkadot/x-randomvalues": "^12.5.1"
   },
   "peerDependencies": {
     "@polkadot/util": "*",
