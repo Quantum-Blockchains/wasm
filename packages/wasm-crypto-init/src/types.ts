@@ -25,13 +25,13 @@ export interface WasmCryptoInstance extends WasmBaseInstance {
 
   ext_ed_verify(ptrSig: number, lenSig: number, ptrMsg: number, lenMsg: number, ptrPub: number, lenPub: number): number;
 
+  ext_blake2b(resLen: 8, ptrData: number, lenData: number, ptrKey: number, lenKey: number, size: number): void;
+
   ext_dilithium_from_seed(resLen: 8, ptrSeed: number, lenSeed: number): void;
 
   ext_dilithium_sign(resLen: 8, ptrPub: number, lenPub: number, ptrSec: number, lenSec: number, ptrMsg: number, lenMsg: number): void;
 
   ext_dilithium_verify(ptrSig: number, lenSig: number, ptrMsg: number, lenMsg: number, ptrPub: number, lenPub: number): number;
-
-  ext_blake2b(resLen: 8, ptrData: number, lenData: number, ptrKey: number, lenKey: number, size: number): void;
 
   ext_hmac_sha256(resLen: 8, ptrKey: number, lenKey: number, ptrData: number, lenData: number): void;
 
