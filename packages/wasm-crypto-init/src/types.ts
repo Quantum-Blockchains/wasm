@@ -27,7 +27,7 @@ export interface WasmCryptoInstance extends WasmBaseInstance {
 
   ext_dilithium_from_seed(resLen: 8, ptrSeed: number, lenSeed: number): void;
 
-  ext_dilithium_sign(resLen: 8, ptrPub: number, lenPub: number, ptrSeed: number, lenSeed: number, ptrMsg: number, lenMsg: number): void;
+  ext_dilithium_sign(resLen: 8, ptrPub: number, lenPub: number, ptrSec: number, lenSec: number, ptrMsg: number, lenMsg: number): void;
 
   ext_dilithium_verify(ptrSig: number, lenSig: number, ptrMsg: number, lenMsg: number, ptrPub: number, lenPub: number): number;
 
