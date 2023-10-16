@@ -94,8 +94,8 @@ export const dilithium2KeypairFromSeed = /*#__PURE__*/ withWasm((wasm, seed: Uin
   return bridge.resultU8a();
 });
 
-export const dilithium2Sign = /*#__PURE__*/ withWasm((wasm, pubkey: Uint8Array, seed: Uint8Array, message: Uint8Array): Uint8Array => {
-  wasm.ext_dilithium_sign(8, ...bridge.allocU8a(pubkey), ...bridge.allocU8a(seed), ...bridge.allocU8a(message));
+export const dilithium2Sign = /*#__PURE__*/ withWasm((wasm, pubkey: Uint8Array, seckey: Uint8Array, message: Uint8Array): Uint8Array => {
+  wasm.ext_dilithium_sign(8, ...bridge.allocU8a(pubkey), ...bridge.allocU8a(seckey), ...bridge.allocU8a(message));
 
   return bridge.resultU8a();
 });
