@@ -16,8 +16,11 @@ fn new_from_seed(seed: &[u8]) -> dilithium2::Keypair {
 /// followed by the public key (1312) bytes.
 #[wasm_bindgen]
 pub fn ext_dilithium_from_seed(seed: &[u8]) -> Vec<u8> {
-	new_from_seed(seed)
-		.to_bytes().to_vec()
+	// new_from_seed(seed)
+	// 	.to_bytes().to_vec()
+    let pair = new_from_seed(seed);
+		// .to_bytes().to_vec()
+    [seed, &pair.public.to_bytes()].concat()
 }
 
 /// Sign a message
@@ -32,7 +35,8 @@ pub fn ext_dilithium_from_seed(seed: &[u8]) -> Vec<u8> {
 /// * returned vector is the signature consisting of 2420 bytes.
 #[wasm_bindgen]
 pub fn ext_dilithium_sign(_: &[u8], sk: &[u8], message: &[u8]) -> Vec<u8> {
-	let pk: dilithium2::SecretKey = dilithium2::SecretKey::from_bytes(sk);
+	let pk: dilithium2::SecretKey = new_from_seed(sk).secret;
+    // let pk: dilithium2::SecretKey = dilithium2::SecretKey::from_bytes(sk);
 	let signature = pk.sign(message);
 	signature.to_vec()
 }
