@@ -31,9 +31,9 @@ pub fn ext_dilithium_from_seed(seed: &[u8]) -> Vec<u8> {
 ///
 /// * returned vector is the signature consisting of 2420 bytes.
 #[wasm_bindgen]
-pub fn ext_dilithium_sign(_: &[u8], sk: &[u8], message: &[u8]) -> Vec<u8> {
-    let pk: dilithium2::SecretKey = new_from_seed(sk).secret;
-	let signature = pk.sign(message);
+pub fn ext_dilithium_sign(_: &[u8], seed: &[u8], message: &[u8]) -> Vec<u8> {
+    let sk: dilithium2::SecretKey = new_from_seed(seed).secret;
+	let signature = sk.sign(message);
 	signature.to_vec()
 }
 
