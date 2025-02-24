@@ -10,6 +10,7 @@ import * as secp256k1 from './secp256k1.js';
 import * as sr25519 from './sr25519.js';
 import * as vrf from './vrf.js';
 import * as dilithium2 from './dilithium2.js';
+import * as mldsa44 from './mldsa44.js';
 
 export const tests = {
   // We place secp256k1 first, this allows the interaction with it in the
@@ -22,7 +23,8 @@ export const tests = {
   hashing,
   sr25519,
   vrf,
-  dilithium2
+  dilithium2,
+  mldsa44,
 };
 
 export async function initRun (name, wasm) {
