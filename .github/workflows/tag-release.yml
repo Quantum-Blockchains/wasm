@@ -1,0 +1,47 @@
+name: Tag Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    env:
+      YARN_ENABLE_SCRIPTS: false
+      CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+      GH_PAT: ${{ secrets.GH_PAT_BOT }}
+      GH_RELEASE_GITHUB_API_TOKEN: ${{ secrets.GH_PAT_BOT }}
+      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GH_PAT_BOT }}
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 'lts/*'
+      - name: Build packages
+        run: |
+          yarn install --immutable
+          ./scripts/install-build-deps.sh
+          yarn build
+      - name: Pack workspace tarballs
+        run: |
+          mkdir -p artifacts
+
+          for dir in packages/*; do
+            if [ -f "$dir/package.json" ]; then
+              npm pack "$dir" --pack-destination artifacts
+            fi
+          done
+
+          ls -la artifacts
+      - name: Upload assets to GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: artifacts/*.tgz
