@@ -5,7 +5,7 @@ use wasm_bindgen::prelude::*;
 use crystals_dilithium::dilithium2;
 /// Keypair helper function
 fn new_from_seed(seed: &[u8]) -> dilithium2::Keypair {
-	dilithium2::Keypair::generate(Some(seed))
+	dilithium2::Keypair::generate(Some(seed)).expect("Invalid seed provided.")
 }
 
 /// Generate a key pair.
@@ -44,11 +44,13 @@ pub fn ext_dilithium_sign(_: &[u8], seed: &[u8], message: &[u8]) -> Vec<u8> {
 /// * pubkey: UIntArray with 1312 element
 #[wasm_bindgen]
 pub fn ext_dilithium_verify(signature: &[u8], message: &[u8], pubkey: &[u8]) -> bool {
-	let pk: dilithium2::PublicKey = dilithium2::PublicKey::from_bytes(pubkey);
 	if signature.len() != 2420 {
 		return false;
 	}
-	pk.verify(message, signature)
+    match dilithium2::PublicKey::from_bytes(pubkey) {
+        Ok(pk) => pk.verify(message, signature),
+        _ => false,
+    }
 }
 
 #[cfg(test)]
@@ -56,11 +58,13 @@ pub mod tests {
 	extern crate rand;
 
 	use super::*;
-	use dilithium::dilithium2 as dil2;
+	use crystals_dilithium::dilithium2 as dil2;
 
-	const KEYPAIR_LENGTH: usize = 3840;
+    const SEED_LENGTH: usize = 32;
+    const SECRET_KEY_LENGTH: usize = 2528;
 	const PUBLIC_KEY_LENGTH: usize = 1312;
-	const SECRET_KEY_LENGTH: usize = 2528;
+    const KEYPAIR_LENGTH: usize = SEED_LENGTH + PUBLIC_KEY_LENGTH;
+	
 	const SIGNATURE_LENGTH: usize = 2420;
 
 	const TEST_PK: [u8; PUBLIC_KEY_LENGTH] = [
@@ -364,7 +368,7 @@ pub mod tests {
 
 		let test = dil2::Keypair::generate(Some(&seed));
 		let keypair = ext_dilithium_from_seed(&seed);
-		let public = &keypair[SECRET_KEY_LENGTH..KEYPAIR_LENGTH];
+		let public = &keypair[SEED_LENGTH..KEYPAIR_LENGTH];
 
 		assert_eq!(public, TEST_PK);
 	}
@@ -373,7 +377,7 @@ pub mod tests {
 	fn can_sign_message() {
 		let seed = generate_random_seed();
 		let keypair = ext_dilithium_from_seed(seed.as_slice());
-		let public = &keypair[SECRET_KEY_LENGTH..KEYPAIR_LENGTH];
+		let public = &keypair[SEED_LENGTH..KEYPAIR_LENGTH];
 		let message = b"this is a message";
 		let signature = ext_dilithium_sign(public, &seed, message);
 
@@ -384,7 +388,7 @@ pub mod tests {
 	fn can_verify_message() {
 		let seed = generate_random_seed();
 		let keypair = ext_dilithium_from_seed(seed.as_slice());
-		let public = &keypair[SECRET_KEY_LENGTH..KEYPAIR_LENGTH];
+		let public = &keypair[SEED_LENGTH..KEYPAIR_LENGTH];
 		let message = b"this is a message";
 		let signature = ext_dilithium_sign(public, &seed, message);
 		let is_valid = ext_dilithium_verify(&signature[..], message, public);
