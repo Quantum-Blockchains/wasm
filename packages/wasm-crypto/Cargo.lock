@@ -186,13 +186,10 @@ dependencies = [
 
 [[package]]
 name = "crystals-dilithium"
-version = "2.0.0"
-source = "git+https://github.com/Quantum-Blockchains/dilithium.git?branch=rust-1.76-compat#7f00d774a008795d1ff8c2ff0aec5cd7d3193e3f"
+version = "1.0.0"
+source = "git+https://github.com/Quantum-Blockchains/dilithium.git?branch=kostia/Dilithium-integration-to-wasm-crypto#e9756e392ac8e21db29f492a576cd86e4488fddd"
 dependencies = [
- "rand 0.8.5",
- "sha2 0.10.9",
- "sha3",
- "zeroize",
+ "rand",
 ]
 
 [[package]]

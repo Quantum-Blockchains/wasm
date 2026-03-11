@@ -24,7 +24,7 @@ export const tests = {
   sr25519,
   vrf,
   dilithium2,
-  mldsa44,
+  mldsa44
 };
 
 export async function initRun (name, wasm) {

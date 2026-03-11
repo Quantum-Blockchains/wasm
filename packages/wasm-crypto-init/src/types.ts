@@ -31,11 +31,11 @@ export interface WasmCryptoInstance extends WasmBaseInstance {
 
   ext_dilithium_verify(ptrSig: number, lenSig: number, ptrMsg: number, lenMsg: number, ptrPub: number, lenPub: number): number;
 
-  ext_mldsa_from_seed(resLen: 8, ptrSeed: number, lenSeed: number): void;
+  ext_mldsa44_from_seed(resLen: 8, ptrSeed: number, lenSeed: number): void;
 
-  ext_mldsa_sign(resLen: 8, ptrPub: number, lenPub: number, ptrSec: number, lenSec: number, ptrMsg: number, lenMsg: number): void;
+  ext_mldsa44_sign(resLen: 8, ptrPub: number, lenPub: number, ptrSec: number, lenSec: number, ptrMsg: number, lenMsg: number): void;
 
-  ext_mldsa_verify(ptrSig: number, lenSig: number, ptrMsg: number, lenMsg: number, ptrPub: number, lenPub: number): number;
+  ext_mldsa44_verify(ptrSig: number, lenSig: number, ptrMsg: number, lenMsg: number, ptrPub: number, lenPub: number): number;
 
   ext_blake2b(resLen: 8, ptrData: number, lenData: number, ptrKey: number, lenKey: number, size: number): void;
 
