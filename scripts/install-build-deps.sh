@@ -25,6 +25,12 @@ unamestr=`uname`
 # toolchain with rust-src (for panic overrdides) and the right wasm32 toolchain
 rustup toolchain install $RUST_VER -c rust-src -t wasm32-unknown-unknown
 
+# The repository can pin a specific toolchain via rust-toolchain.toml (e.g. 1.76.0).
+# Ensure the currently active toolchain used by cargo also has rust-src + wasm target.
+ACTIVE_TOOLCHAIN=$(rustup show active-toolchain | awk '{print $1}')
+rustup component add rust-src --toolchain "$ACTIVE_TOOLCHAIN"
+rustup target add wasm32-unknown-unknown --toolchain "$ACTIVE_TOOLCHAIN"
+
 if [ "$RUST_VER" != "stable" ]; then
   cargo install xargo
 fi

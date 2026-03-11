@@ -5,16 +5,9 @@ import path from 'node:path';
 import process from 'node:process';
 import { pathToFileURL } from 'node:url';
 
-/**
- * Adjusts the resolver to point to the build output
- *
- * @param {*} specifier
- * @param {*} context
- * @param {*} nextResolve
- * @returns {*}
- */
+// Adjusts the resolver to point to the build output
 export function resolve (specifier, context, nextResolve) {
-  if (specifier.startsWith('@polkadot/wasm-')) {
+  if (/^@polkadot\/wasm-/.test(specifier)) {
     const parts = specifier.split(/[\\/]/);
 
     return {
