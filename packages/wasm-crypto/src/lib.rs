@@ -25,3 +25,6 @@ pub mod vrf;
 
 #[path = "rs/dilithium2.rs"]
 pub mod dilithium2;
+
+#[path = "rs/mldsa44.rs"]
+pub mod mldsa44;
