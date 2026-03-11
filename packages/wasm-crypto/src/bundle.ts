@@ -106,6 +106,24 @@ export const dilithium2Verify = /*#__PURE__*/ withWasm((wasm, signature: Uint8Ar
   return ret !== 0;
 });
 
+export const mldsa44KeypairFromSeed = /*#__PURE__*/ withWasm((wasm, seed: Uint8Array): Uint8Array => {
+  wasm.ext_mldsa44_from_seed(8, ...bridge.allocU8a(seed));
+
+  return bridge.resultU8a();
+});
+
+export const mldsa44Sign = /*#__PURE__*/ withWasm((wasm, pubkey: Uint8Array, seckey: Uint8Array, message: Uint8Array): Uint8Array => {
+  wasm.ext_mldsa44_sign(8, ...bridge.allocU8a(pubkey), ...bridge.allocU8a(seckey), ...bridge.allocU8a(message));
+
+  return bridge.resultU8a();
+});
+
+export const mldsa44Verify = /*#__PURE__*/ withWasm((wasm, signature: Uint8Array, message: Uint8Array, pubkey: Uint8Array): boolean => {
+  const ret = wasm.ext_mldsa44_verify(...bridge.allocU8a(signature), ...bridge.allocU8a(message), ...bridge.allocU8a(pubkey));
+
+  return ret !== 0;
+});
+
 export const secp256k1FromSeed = /*#__PURE__*/ withWasm((wasm, seckey: Uint8Array): Uint8Array => {
   wasm.ext_secp_from_seed(8, ...bridge.allocU8a(seckey));
 
